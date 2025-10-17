@@ -122,7 +122,7 @@ experience span p, education span p  {
   padding: 0;
 }
 
-.color-scheme {
+label.color-scheme {
   position: absolute;
   top: 1rem;
   right: 1rem;
