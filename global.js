@@ -33,12 +33,18 @@ let nav = document.createElement('nav');
 document.body.prepend(nav);
 
 for (let p of pages) {
-    let url = !p.url.startsWith('http') ? p.url + BASE_PATH : p.url;
+    //Checks if url is relative
+    //if not, prefix with base path
+    let url = !p.url.startsWith('http') ? BASE_PATH + p.url : p.url;
     let title = p.title;
     
+    //Create a new anchor tag
     let a = document.createElement('a');
-    a.href = abs(p.url);
+    //sets the href attribute of the anchor
+    a.href = url;
+    //sets the visible text for the nav bar
     a.textContent = title;
+    //append to nav bar
     nav.append(a);
 
     if (a.host === location.host && a.pathname === location.pathname) {
