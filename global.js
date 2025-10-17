@@ -37,7 +37,7 @@ for (let p of pages) {
     let title = p.title;
     
     let a = document.createElement('a');
-    a.href = url;
+    a.href = abs(p.url);
     a.textContent = title;
     nav.append(a);
 
