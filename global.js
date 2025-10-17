@@ -19,7 +19,7 @@ if (currentLink) {
 // Add a new navigation menu 
 const BASE_PATH = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
 ? "/portfolio/"           //local server
-: "/portfolio/"; //Github pages repo
+: "/portfolio/";          //Github pages repo
 
 let pages = [
     {url: '', title: 'Home'},
@@ -33,7 +33,7 @@ let nav = document.createElement('nav');
 document.body.prepend(nav);
 
 for (let p of pages) {
-    let url = !p.url.startsWith('http') ? p.url : BASE_PATH + p.url;
+    let url = !p.url.startsWith('http') ? p.url + BASE_PATH : p.url;
     let title = p.title;
     
     let a = document.createElement('a');
