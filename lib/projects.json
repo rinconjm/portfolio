@@ -2,19 +2,19 @@
     {
         "title": "Food Processing Analysis",
         "year": 2025,
-        "image": "./images/food_distribution.png",
+        "image": "images/food_distribution.png",
         "description": "An analysis of Food Processing (NOVA) scores across three major U.S. supermarkets. "
     },
     {
         "title": "Bus Routes in San Diego",
         "year": 2025,
-        "image": "./images/bus_routes_proj.png",
+        "image": "images/bus_routes_proj.png",
         "description": "Et dicta vitae ullam ipsa dolorem, eos, expedita dolores, tempora sint obcaecati corporis necessitatibus iure autem aliquam placeat."
     },
     {
         "title": "Understanding Power Outages Across the U.S.",
         "year": 2025,
-        "image": "./images/power_outages.png",
+        "image": "images/power_outages.png",
         "description": "Exploratory Data Analysis of major power outages accross the U.S"
     },
     {

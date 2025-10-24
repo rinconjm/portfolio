@@ -22,11 +22,11 @@ const BASE_PATH = (location.hostname === "localhost" || location.hostname === "1
     : "/portfolio/";          //Github pages repo
 
 let pages = [
-    { url: '', title: 'Home' },
-    { url: 'projects/', title: 'Projects' },
-    { url: 'resume/', title: 'Resume' },
-    { url: 'contact/', title: 'Contact' },
-    { url: 'https://github.com/rinconjm', title: 'Github Profile' },
+    {url: '', title: 'Home'},
+    {url: 'projects/', title: 'Projects'},
+    {url: 'resume/', title: 'Resume'},
+    {url: 'contact/', title: 'Contact'},
+    {url: 'https://github.com/rinconjm', title: 'Github Profile'},
 ];
 
 let nav = document.createElement('nav');
