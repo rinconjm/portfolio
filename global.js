@@ -2,7 +2,7 @@ console.log('IT’S ALIVE!');
 
 //Add Current status to nav link
 function $$(selector, context = document) {
-  return Array.from(context.querySelectorAll(selector));
+    return Array.from(context.querySelectorAll(selector));
 }
 
 const navLinks = $$('nav a');
@@ -18,15 +18,15 @@ if (currentLink) {
 
 // Add a new navigation menu 
 const BASE_PATH = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-? "/portfolio/"           //local server
-: "/portfolio/";          //Github pages repo
+    ? "/portfolio/"           //local server
+    : "/portfolio/";          //Github pages repo
 
 let pages = [
-    {url: '', title: 'Home'},
-    {url: 'projects/', title: 'Projects'},
-    {url: 'resume/', title: 'Resume'},
-    {url: 'contact/', title: 'Contact'},
-    {url: 'https://github.com/rinconjm', title: 'Github Profile'},
+    { url: '', title: 'Home' },
+    { url: 'projects/', title: 'Projects' },
+    { url: 'resume/', title: 'Resume' },
+    { url: 'contact/', title: 'Contact' },
+    { url: 'https://github.com/rinconjm', title: 'Github Profile' },
 ];
 
 let nav = document.createElement('nav');
@@ -37,7 +37,7 @@ for (let p of pages) {
     //if not, prefix with base path
     let url = !p.url.startsWith('http') ? BASE_PATH + p.url : p.url;
     let title = p.title;
-    
+
     //Create a new anchor tag
     let a = document.createElement('a');
     //sets the href attribute of the anchor
@@ -51,13 +51,13 @@ for (let p of pages) {
         a.classList.add('current');
     }
     if (a.host !== location.host && a.pathname !== location.pathname) {
-        a.target="_blank";
+        a.target = "_blank";
     }
 }
 
 document.body.insertAdjacentHTML(
-  'afterbegin',
-  `
+    'afterbegin',
+    `
 	<label class="color-scheme">
 		Theme:
 		<select>
@@ -84,7 +84,7 @@ select.addEventListener('input', function (event) {
 
 const form = document.querySelector('form');
 
-form?.addEventListener('submit', function(event) {
+form?.addEventListener('submit', function (event) {
     event.preventDefault();
 
     const data = new FormData(form);
@@ -104,7 +104,44 @@ export async function fetchJSON(url) {
         if (!response.ok) {
             throw new Error(`Failed to fetch projects: ${response.statusText}`);
         }
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error('Error fetching or parsing JSON data:', error);
     }
+}
+
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+    // Ensure containerElement is a valid DOM element
+    if (!(containerElement instanceof HTMLElement)) {
+        console.error('renderProjects: containerElement is not a valid DOM element');
+        return;
+    }
+    containerElement.innerHTML = '';
+
+    // Handle missing project data
+    if (!Array.isArray(projects) || projects.length==0) {
+        const placeholder = document.createElement('p');
+        placeholder.className('no-projects');
+        placeholder.textContent('No projects available at this moment');
+        containerElement.appendChild(placeholder);
+        return;
+    }
+
+    // Render all project articles
+    projects.forEach(project => {
+        const article = document.createElement('article');
+
+        article.innerHTML = `
+            <h3>${project.title}</h3>
+            <img src="${project.image}" alt="${project.title}">
+            <p>${project.description}</p>
+        `;
+
+        containerElement.appendChild(article);
+    })
+}
+
+export async function fetchGithubData(username) {
+  return fetchJSON(`https://api.github.com/users/${username}`);
 }
