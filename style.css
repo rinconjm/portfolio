@@ -19,7 +19,7 @@ h1 {
 body {
   font: 100%/1.5 system-ui;
   max-width: 100ch;
-  margin-inline: max(1em, (100% - 100ch) / 2); /* This has to be fixed */
+  margin-inline: max(1em, (100% - 100ch) / 2);
   padding: 2em;
 }
 
@@ -85,6 +85,11 @@ button {
   margin: 0;
 }
 
+/* .projects image {
+  object-fit: fill;
+  border: 1px solid red;
+  width: auto; */
+
 .contact-info {
   display: flex;
   gap: 1em;
@@ -128,4 +133,22 @@ label.color-scheme {
   right: 1rem;
   font-size: 80%;
   font-family: inherit;
+}
+
+.dropdown#profile-stats#profile-stats {
+  width: 80%;
+  margin: 0 auto;
+}
+.dropdown#profile-stats#profile-stats dl{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.dropdown#profile-stats#profile-stats dt{
+  grid-row: 1;
+}
+
+.dropdown#profile-stats#profile-stats dd{
+  grid-row: 2;
 }
