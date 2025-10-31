@@ -84,7 +84,7 @@ select.addEventListener('input', function (event) {
 
 const form = document.querySelector('form');
 
-form?.addEventListener('submit', function (event) {
+form?.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const data = new FormData(form);
@@ -135,7 +135,11 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
         article.innerHTML = `
             <h3>${project.title}</h3>
             <img src="${project.image}" alt="${project.title}">
-            <p>${project.description}</p>
+            <div>
+                <p class="description">${project.description}</p>
+                <p></p>
+            </div>
+            <p class="year">c. ${project.year}</p>
         `;
 
         containerElement.appendChild(article);
