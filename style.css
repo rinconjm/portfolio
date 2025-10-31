@@ -1,5 +1,5 @@
 :root {
-  --color-accent: #172A3A;
+  --color-accent: oklch(27.67% 03.88% 245.25);
 }
 
 html {
@@ -72,23 +72,117 @@ button {
   display: grid;
   grid-template-columns:  repeat(auto-fill, minmax(15em, 1fr));
   gap: 1em;
+  align-items: start;
 }
 
 .projects article {
   display: grid;
   grid-template-rows: subgrid;
+  /* grid-template-rows: max-content max-content 1fr max-content; */
   grid-row: span 3;
+  padding: .75rem;
+  border-radius: .75em;
+  background-color:  oklch(96.416% 0.00011 271.152);
+  /* gap: .75rem; */
 }
 
-
 .projects article h2 {
+  /* min-height: 1em; */
   margin: 0;
 }
 
-/* .projects image {
-  object-fit: fill;
-  border: 1px solid red;
-  width: auto; */
+#projects-pie-plot {
+  max-width: 20em;
+  margin-block: 2em;
+
+  overflow: visible;
+}
+
+.projects div {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  /* border: 1px solid rgb(255, 140, 0); */
+}
+
+.projects article .content {
+  grid-row: 3;
+  margin-bottom: 2rem;
+}
+
+.projects article img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.projects article .year {
+  grid-row: 4;         /* dedicated bottom row */
+  align-self: end;
+  margin: 0;
+  /* border: 1px solid rgb(47, 0, 255); */
+  font-size: 14px;
+}
+
+.searchBar {
+  --box-height: 48px;
+  --border-radius: calc(var(--box-height) / 2);
+  border: 2px solid  oklch(65.335% 0.00007 271.152);
+  height: var(--box-height);
+  border-radius: var(--border-radius);
+  margin-bottom: 2em;
+  padding: .5em;
+  max-width: 10rem;
+}
+
+path {
+  transition: 300ms;
+  cursor: pointer;
+}
+
+&:has(path:hover) {
+  path:not(:hover) {
+    opacity: 40%;
+  }
+}
+
+.selected {
+  --color: oklch(62.793% 0.25768 29.223) !important;
+
+  &:is(path) {
+    fill: var(--color);
+  }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+  border: 1px solid oklab(91.747% -0.00191 0.00632);
+  border-radius: .4rem;
+  padding: 1em;
+  flex: 1;
+  gap: .3rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: .2rem;
+}
+
+ .swatch{
+  display: inline-block;
+  width: 1em;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--color);
+}
 
 .contact-info {
   display: flex;
