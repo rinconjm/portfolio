@@ -246,3 +246,145 @@ label.color-scheme {
 .dropdown#profile-stats#profile-stats dd{
   grid-row: 2;
 }
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem; /* space between stats */
+  /* width: 100%; */
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-block dt {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: light-dark(oklch(0.551 0.0234 264.36), oklch(74.336% 0.0324 265.286)); /* subtle gray label */
+  margin-bottom: 0.25rem;
+}
+
+.stat-block dd {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: light-dark(oklch(0.2101 0.0318 264.66), oklch(87.11% 0.0213 261.817)); /* darker text for numbers */
+  margin: 0;
+}
+
+/* --- Definition list info layout --- */
+dl.info {
+  display: grid;
+  grid-template-columns: auto 1fr; /* dt on 1st col, dd on 2nd */
+  column-gap: 1rem;
+  margin: 0;
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
+}
+
+dl.info[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+dl.info dt,
+dl.info dd {
+  margin: 0; /* remove default margins */
+}
+
+dl.info dt {
+  color: #6b7280; /* make labels less prominent (gray) */
+  font-weight: 500;
+}
+
+dl.info dd {
+  color: #111827; /* darker value text */
+  font-weight: 600;
+}
+
+/* --- Tooltip positioning --- */
+#commit-tooltip {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  background: rgba(255, 255, 255, 0.80);
+  border: 1px solid #d1d5db;
+  border-radius: 0.5em;
+  padding: 0.5em 1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* pointer-events: none; so it doesn't block mouse interactions */
+}
+
+
+circle {
+  transition: 200ms;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+circle:hover {
+  transform: scale(1.5);
+}
+
+circle.selected {
+  fill: oklch(0.7116 0.1812 22.84);
+}
+
+@keyframes marching-ants {
+  to {
+    stroke-dashoffset: -8; /* 5 + 3 */
+  }
+}
+
+.selection {
+  fill-opacity: 0.1;
+  stroke: oklch(0.551 0.0234 264.36);
+  stroke-opacity: 0.7;
+  stroke-dasharray: 5 3;
+  animation: marching-ants 2s linear infinite;
+}
+
+#language-breakdown {
+  display: grid;
+  /* two rows per column: row 1 = dt, row 2 = dd */
+  grid-template-rows: auto auto;
+  /* fill grid by columns so each (dt, dd) pair stacks vertically */
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+
+  column-gap: 3rem;   /* space between language columns */
+  row-gap: 0.25rem;   /* space between dt and dd */
+  text-align: center;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+/* remove default margins */
+dl#language-breakdown,
+dl#language-breakdown dd {
+  margin: 0;
+}
+
+/* style labels (language names) */
+dl#language-breakdown dt {
+  font-weight: 600;
+  text-transform: uppercase;
+  color: light-dark(#374151, #d1d5db); /* subtle gray */
+  margin-bottom: 0.25rem;
+}
+
+/* style values and percentages */
+dl#language-breakdown dd {
+  font-family: monospace;
+  color: light-dark(#111827, #f9fafb); /* darker text */
+}
+
+/* optional: add spacing between count and percentage lines */
+dl#language-breakdown dd + dd {
+  margin-top: 0.25rem;
+}
