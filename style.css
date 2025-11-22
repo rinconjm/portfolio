@@ -322,9 +322,12 @@ dl.info dd {
 
 
 circle {
-  transition: 200ms;
+  transition: all 200ms, r calc(var(--r) * 100ms);
   transform-origin: center;
   transform-box: fill-box;
+  @starting-style {
+    r: 0;
+  }
 }
 
 circle:hover {
@@ -387,4 +390,90 @@ dl#language-breakdown dd {
 /* optional: add spacing between count and percentage lines */
 dl#language-breakdown dd + dd {
   margin-top: 0.25rem;
+}
+
+.commit-label {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  justify-content: space-between;
+  color: light-dark(#374151, #d1d5db); /* subtle gray */
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;   /* space between slider and time */
+  width: 80%;
+  accent-color: rgb(39, 53, 133);
+}
+
+#commit-progress {
+  flex: 1;     /* <— makes slider take full available width */
+}
+
+#files {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+
+  > div {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    position: relative;              /* optional but harmless */
+    will-change: transform;
+    transition: transform 400ms ease-out;
+  }
+
+  dt { grid-column: 1; }
+  dt code { display: block; }
+  dt small { display: block; font-size: 0.8em; opacity: 0.6; }
+  dd { grid-column: 2; }
+}
+
+.loc {
+  display: flex;
+  width: 0.5em;
+  aspect-ratio: 1;
+  background: var(--color);
+  border-radius: 50%;
+}
+
+dd {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  align-content: start;
+  gap: 0.15em;
+  padding-top: 0.6em;
+  margin-left: 0;
+  /* border: #002FA7 1px solid; */
+}
+
+#scrolly-1, #scrolly-files {
+  position: relative;
+  display: flex;
+  gap: 1rem;
+
+  > * {
+    flex: 1;
+  }
+}
+
+#scatter-story {
+  position: relative;
+}
+
+#scatter-story .step,  #files-story .step{
+  font-size: x-small;
+  color: light-dark(#374151, #d1d5db); /* subtle gray */
+}
+
+#scatter-plot {
+  position: sticky;
+  top: 0;
+  left: 0;
+  bottom: auto;
+  height: 50vh;
 }

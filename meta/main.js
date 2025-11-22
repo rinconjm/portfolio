@@ -1,7 +1,7 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 // Read CSV file
-async function loadData() {
+export async function loadData() {
     const data = await d3.csv('loc.csv', (row) => ({
         ...row,
         line: Number(row.line),
@@ -15,7 +15,7 @@ async function loadData() {
 }
 
 // Computing commit data
-function processCommits(data) {
+export function processCommits(data) {
     return d3
         .groups(data, (d) => d.commit)
         .map(([commit, lines]) => {
@@ -41,7 +41,8 @@ function processCommits(data) {
             });
 
             return ret;
-        });
+        })
+        .sort((a,b) => a.datetime - b.datetime);
 }
 
 // Display the stats
@@ -54,7 +55,7 @@ function renderCommitInfo(data, commits) {
         { label: 'Commits', value: commits.length },
         { label: 'Files', value: d3.groups(data, d => d.file).length },
         { label: 'Max Depth', value: d3.max(data, d => d.depth) },
-        { label: 'Days Worked', value: new Set(commits.map(d => d.date)).size},
+        { label: 'Days Worked', value: new Set(commits.map(d => d.date)).size },
         { label: 'Max Lines', value: d3.max(commits, c => c.totalLines) },
     ];
 
@@ -166,7 +167,7 @@ function renderScatterPlot(data, commits) {
 
     dots
         .selectAll('circle')
-        .data(sortedCommits)
+        .data(sortedCommits, (d) => d.id)
         .join('circle')
         .attr('cx', (d) => xScale(d.datetime))
         .attr('cy', (d) => yScale(d.hourFrac))
@@ -181,6 +182,57 @@ function renderScatterPlot(data, commits) {
         })
         .on('mouseleave', () => {
             d3.select(event.currentTarget).style('fill-opacity', '0.6');
+            updateTooltipVisibility(false);
+        });
+}
+
+export function updateScatterPlot(data, commits) {
+    const width = 1000;
+    const height = 600;
+    const margin = { top: 10, right: 10, bottom: 30, left: 20 };
+    const usableArea = {
+        top: margin.top,
+        right: width - margin.right,
+        bottom: height - margin.bottom,
+        left: margin.left,
+        width: width - margin.left - margin.right,
+        height: height - margin.top - margin.bottom,
+    };
+
+    const svg = d3.select('#chart').select('svg');
+
+    xScale = xScale.domain(d3.extent(commits, (d) => d.datetime));
+
+    const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
+    const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
+
+    const xAxis = d3.axisBottom(xScale);
+    
+    const xAxisGroup = svg.select('g.x-axis');
+    xAxisGroup.selectAll('*').remove();
+    xAxisGroup.call(xAxis);
+
+    const dots = svg.select('g.dots');
+
+    const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+    dots
+        .selectAll('circle')
+        .data(sortedCommits, (d) => d.id)
+        .join('circle')
+        .attr('cx', (d) => xScale(d.datetime))
+        .attr('cy', (d) => yScale(d.hourFrac))
+        .attr('r', (d) => rScale(d.totalLines))
+        .style('--r', (d) => rScale(d.totalLines))  // <-- CSS variable
+        .attr('fill', 'steelblue')
+        .style('fill-opacity', 0.7) // Add transparency for overlapping dots
+        .on('mouseenter', (event, commit) => {
+            d3.select(event.currentTarget).style('fill-opacity', 1); // Full opacity on hover
+            renderTooltipContent(commit);
+            updateTooltipVisibility(true);
+            updateTooltipPosition(event);
+        })
+        .on('mouseleave', (event) => {
+            d3.select(event.currentTarget).style('fill-opacity', 0.7);
             updateTooltipVisibility(false);
         });
 }
@@ -248,48 +300,47 @@ function isCommitSelected(selection, commit) {
 
 function renderSelectionCount(selection) {
     const selectedCommits = selection
-    ? commits.filter((d) => isCommitSelected(selection, d))
-    : [];
+        ? commits.filter((d) => isCommitSelected(selection, d))
+        : [];
 
     const countElement = document.querySelector('#selection-count');
-    countElement.textContent = `${
-        selectedCommits.length || 'No'} commits selected`;
-    
+    countElement.textContent = `${selectedCommits.length || 'No'} commits selected`;
+
     return selectedCommits;
 }
 
 function renderLanguageBreakdown(selection) {
-  const selectedCommits = selection
-    ? commits.filter((d) => isCommitSelected(selection, d))
-    : [];
-  const container = document.getElementById('language-breakdown');
+    const selectedCommits = selection
+        ? commits.filter((d) => isCommitSelected(selection, d))
+        : [];
+    const container = document.getElementById('language-breakdown');
 
-  if (selectedCommits.length === 0) {
+    if (selectedCommits.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    const requiredCommits = selectedCommits.length ? selectedCommits : commits;
+    const lines = requiredCommits.flatMap((d) => d.lines);
+
+    // Use d3.rollup to count lines per language
+    const breakdown = d3.rollup(
+        lines,
+        (v) => v.length,
+        (d) => d.type,
+    );
+
+    // Update DOM with breakdown
     container.innerHTML = '';
-    return;
-  }
-  const requiredCommits = selectedCommits.length ? selectedCommits : commits;
-  const lines = requiredCommits.flatMap((d) => d.lines);
 
-  // Use d3.rollup to count lines per language
-  const breakdown = d3.rollup(
-    lines,
-    (v) => v.length,
-    (d) => d.type,
-  );
+    for (const [language, count] of breakdown) {
+        const proportion = count / lines.length;
+        const formatted = d3.format('.1~%')(proportion);
 
-  // Update DOM with breakdown
-  container.innerHTML = '';
-
-  for (const [language, count] of breakdown) {
-    const proportion = count / lines.length;
-    const formatted = d3.format('.1~%')(proportion);
-
-    container.innerHTML += `
+        container.innerHTML += `
             <dt>${language}</dt>
             <dd>${count} lines (${formatted})</dd>
         `;
-  }
+    }
 }
 
 let data = await loadData();
@@ -299,3 +350,5 @@ let xScale, yScale;
 
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
+
+export { commits, data };

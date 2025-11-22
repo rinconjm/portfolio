@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,36 +8,58 @@
     <link rel="stylesheet" href="../style.css" />
     <script src="../global.js" type="module"></script>
     <script src="main.js" type="module"></script>
+    <script src="meta.js" type="module"></script>
 </head>
+
 <body>
     <h1>Meta</h1>
     <p>This page includes stats about the code on this website.</p>
+
+    <!-- <label for="commit-progress" class="commit-label">
+        Show commits until:
+        <div class="slider-row">
+            <input type="range" min="0" max="100" value="0" id="commit-progress" />
+            <time id="commit-time"></time>
+        </div>
+    </label> -->
+
     <div id="stats"></div>
 
     <h2>Commits by time of day</h2>
-    <div id="chart"></div>
-    <p id="selection-count">No commits selected</p>
-    <dl id="language-breakdown" class="stats"></dl>
 
+    <div id="scrolly-1">
+        <div id="scatter-story"></div>
+        <div id="scatter-plot">
+            <div id="chart"></div>
+            <p id="selection-count">No commits selected</p>
+            <dl id="language-breakdown" class="stats"></dl>
+            <dl id="commit-tooltip" class="info tooltip" hidden>
+                <dt>Commit</dt>
+                <dd>
+                    <a href="" id="commit-link" target="_blank"></a>
+                </dd>
 
-    <dl id="commit-tooltip" class="info tooltip" hidden>
-        <dt>Commit</dt>
-        <dd>
-            <a href="" id="commit-link" target="_blank"></a>
-        </dd>
+                <dt>Date</dt>
+                <dd id="commit-date"></dd>
 
-        <dt>Date</dt>
-        <dd id="commit-date"></dd>
-        <!-- Add: Time, author, lines edited -->
+                <dt>Time</dt>
+                <dd id="commit-time"></dd>
 
-        <dt>Time</dt>
-        <dd id="commit-time"></dd>
+                <dt>Author</dt>
+                <dd id="commit-author"></dd>
 
-        <dt>Author</dt>
-        <dd id="commit-author"></dd>
+                <dt>Lines Edited</dt>
+                <dd id="commit-lines"></dd>
+            </dl>
+        </div>
+    </div>
 
-        <dt>Lines Edited</dt>
-        <dd id="commit-lines"></dd>
-    </dl>
+    <div id="scrolly-files">
+        <div id="files-viz">
+            <dl id="files"></dl>
+        </div>
+        <div id="files-story"></div>
+    </div>
+</body>
 
-</html> 
+</html>
